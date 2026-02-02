@@ -2,137 +2,162 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="bg-gray-50/50 min-h-screen flex flex-col">
     <!-- Navbar -->
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <!-- Main Content -->
     <main class="flex-grow">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <!-- Alerts -->
             <div th:replace="~{fragments/layout :: alerts}"></div>
 
             <!-- Welcome Section -->
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">
-                    Welcome back, <span th:text="${user?.name ?: 'User'}">User</span>! 👋
-                </h1>
-                <p class="mt-2 text-gray-600">Here's an overview of your student management system.</p>
+            <div class="mb-10">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-primary-100 flex items-center justify-center">
+                        <i class="fas fa-user-circle text-primary-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">
+                            Welcome back, <span th:text="${user?.name ?: 'User'}" class="text-primary-600">User</span>
+                        </h1>
+                        <p class="mt-1 text-gray-500">Here's an overview of your student management system.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                 <!-- Departments Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-purple-100">
-                            <i class="fas fa-building text-purple-600 text-xl"></i>
+                <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center">
+                            <i class="fas fa-building text-violet-600 text-xl"></i>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Departments</p>
-                            <p class="text-2xl font-bold text-gray-900" th:text="${departmentCount}">0</p>
-                        </div>
+                        <span class="text-xs font-medium text-gray-400 uppercase tracking-wide">Total</span>
                     </div>
-                    <a href="/departments" class="mt-4 inline-flex items-center text-sm text-purple-600 hover:text-purple-700">
-                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    <p class="text-3xl font-bold text-gray-900" th:text="${departmentCount}">0</p>
+                    <p class="text-sm text-gray-500 mt-1">Departments</p>
+                    <a href="/departments" class="mt-4 inline-flex items-center text-sm text-violet-600 hover:text-violet-700 font-medium">
+                        View all <i class="fas fa-arrow-right ml-2 text-xs"></i>
                     </a>
                 </div>
 
                 <!-- Students Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-green-100">
-                            <i class="fas fa-user-graduate text-green-600 text-xl"></i>
+                <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                            <i class="fas fa-user-graduate text-emerald-600 text-xl"></i>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Students</p>
-                            <p class="text-2xl font-bold text-gray-900" th:text="${studentCount}">0</p>
-                        </div>
+                        <span class="text-xs font-medium text-gray-400 uppercase tracking-wide">Total</span>
                     </div>
-                    <a href="/students" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
-                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    <p class="text-3xl font-bold text-gray-900" th:text="${studentCount}">0</p>
+                    <p class="text-sm text-gray-500 mt-1">Students</p>
+                    <a href="/students" class="mt-4 inline-flex items-center text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                        View all <i class="fas fa-arrow-right ml-2 text-xs"></i>
                     </a>
                 </div>
 
                 <!-- Teachers Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-yellow-100">
-                            <i class="fas fa-chalkboard-teacher text-yellow-600 text-xl"></i>
+                <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fas fa-chalkboard-teacher text-amber-600 text-xl"></i>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Teachers</p>
-                            <p class="text-2xl font-bold text-gray-900" th:text="${teacherCount}">0</p>
-                        </div>
+                        <span class="text-xs font-medium text-gray-400 uppercase tracking-wide">Total</span>
                     </div>
-                    <a href="/teachers" class="mt-4 inline-flex items-center text-sm text-yellow-600 hover:text-yellow-700">
-                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    <p class="text-3xl font-bold text-gray-900" th:text="${teacherCount}">0</p>
+                    <p class="text-sm text-gray-500 mt-1">Teachers</p>
+                    <a href="/teachers" class="mt-4 inline-flex items-center text-sm text-amber-600 hover:text-amber-700 font-medium">
+                        View all <i class="fas fa-arrow-right ml-2 text-xs"></i>
                     </a>
                 </div>
 
                 <!-- Courses Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-blue-100">
-                            <i class="fas fa-book text-blue-600 text-xl"></i>
+                <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-sky-100 flex items-center justify-center">
+                            <i class="fas fa-book text-sky-600 text-xl"></i>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Courses</p>
-                            <p class="text-2xl font-bold text-gray-900" th:text="${courseCount}">0</p>
-                        </div>
+                        <span class="text-xs font-medium text-gray-400 uppercase tracking-wide">Total</span>
                     </div>
-                    <a href="/courses" class="mt-4 inline-flex items-center text-sm text-blue-600 hover:text-blue-700">
-                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    <p class="text-3xl font-bold text-gray-900" th:text="${courseCount}">0</p>
+                    <p class="text-sm text-gray-500 mt-1">Courses</p>
+                    <a href="/courses" class="mt-4 inline-flex items-center text-sm text-sky-600 hover:text-sky-700 font-medium">
+                        View all <i class="fas fa-arrow-right ml-2 text-xs"></i>
                     </a>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" sec:authorize="hasRole('TEACHER')">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                    <i class="fas fa-bolt text-yellow-500 mr-2"></i> Quick Actions
-                </h2>
+            <div class="bg-white rounded-2xl border border-gray-100 p-8" sec:authorize="hasRole('TEACHER')">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center">
+                        <i class="fas fa-bolt text-primary-600"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900">Quick Actions</h2>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <a href="/departments/new" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
-                        <i class="fas fa-plus-circle text-purple-600 mr-3"></i>
-                        <span class="font-medium text-purple-700">New Department</span>
+                    <a href="/departments/new" class="group flex items-center p-4 bg-gray-50 hover:bg-violet-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-violet-100 group-hover:bg-violet-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-plus text-violet-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-violet-700">New Department</span>
                     </a>
-                    <a href="/courses/new" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                        <i class="fas fa-plus-circle text-blue-600 mr-3"></i>
-                        <span class="font-medium text-blue-700">New Course</span>
+                    <a href="/courses/new" class="group flex items-center p-4 bg-gray-50 hover:bg-sky-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-sky-100 group-hover:bg-sky-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-plus text-sky-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-sky-700">New Course</span>
                     </a>
-                    <a href="/students/new" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <i class="fas fa-user-plus text-green-600 mr-3"></i>
-                        <span class="font-medium text-green-700">New Student</span>
+                    <a href="/students/new" class="group flex items-center p-4 bg-gray-50 hover:bg-emerald-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 group-hover:bg-emerald-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-user-plus text-emerald-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-emerald-700">New Student</span>
                     </a>
-                    <a href="/students" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                        <i class="fas fa-users text-gray-600 mr-3"></i>
+                    <a href="/students" class="group flex items-center p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-gray-200 group-hover:bg-gray-300 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-users text-gray-600"></i>
+                        </div>
                         <span class="font-medium text-gray-700">Manage Students</span>
                     </a>
                 </div>
             </div>
 
             <!-- Student View Actions -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" sec:authorize="hasRole('STUDENT')">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                    <i class="fas fa-compass text-blue-500 mr-2"></i> Navigation
-                </h2>
+            <div class="bg-white rounded-2xl border border-gray-100 p-8" sec:authorize="hasRole('STUDENT')">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center">
+                        <i class="fas fa-compass text-primary-600"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900">Quick Navigation</h2>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <a href="/departments" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
-                        <i class="fas fa-building text-purple-600 mr-3"></i>
-                        <span class="font-medium text-purple-700">Browse Departments</span>
+                    <a href="/departments" class="group flex items-center p-4 bg-gray-50 hover:bg-violet-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-violet-100 group-hover:bg-violet-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-building text-violet-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-violet-700">Departments</span>
                     </a>
-                    <a href="/courses" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                        <i class="fas fa-book text-blue-600 mr-3"></i>
-                        <span class="font-medium text-blue-700">Browse Courses</span>
+                    <a href="/courses" class="group flex items-center p-4 bg-gray-50 hover:bg-sky-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-sky-100 group-hover:bg-sky-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-book text-sky-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-sky-700">Courses</span>
                     </a>
-                    <a href="/teachers" class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors">
-                        <i class="fas fa-chalkboard-teacher text-yellow-600 mr-3"></i>
-                        <span class="font-medium text-yellow-700">View Teachers</span>
+                    <a href="/teachers" class="group flex items-center p-4 bg-gray-50 hover:bg-amber-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-chalkboard-teacher text-amber-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-amber-700">Teachers</span>
                     </a>
-                    <a href="/students" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                        <i class="fas fa-users text-green-600 mr-3"></i>
-                        <span class="font-medium text-green-700">View Students</span>
+                    <a href="/students" class="group flex items-center p-4 bg-gray-50 hover:bg-emerald-50 rounded-xl transition-all duration-200">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 group-hover:bg-emerald-200 flex items-center justify-center mr-4 transition-colors">
+                            <i class="fas fa-users text-emerald-600"></i>
+                        </div>
+                        <span class="font-medium text-gray-700 group-hover:text-emerald-700">Students</span>
                     </a>
                 </div>
             </div>

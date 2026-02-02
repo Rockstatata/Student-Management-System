@@ -4,6 +4,7 @@ import com.sarwad.sms.studentmanagementsystem.dto.CourseDto;
 import com.sarwad.sms.studentmanagementsystem.security.CustomUserDetails;
 import com.sarwad.sms.studentmanagementsystem.service.CourseService;
 import com.sarwad.sms.studentmanagementsystem.service.DepartmentService;
+import com.sarwad.sms.studentmanagementsystem.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ public class CourseController {
 
     private final CourseService courseService;
     private final DepartmentService departmentService;
+    private final StudentService studentService;
 
     @GetMapping
     public String listCourses(@AuthenticationPrincipal CustomUserDetails userDetails,
@@ -44,6 +46,11 @@ public class CourseController {
         CourseDto course = courseService.getCourseById(id);
         model.addAttribute("course", course);
         model.addAttribute("user", userDetails);
+        model.addAttribute("enrolledStudents", courseService.getEnrolledStudents(id));
+        // Get all students for teacher to enroll
+        if (userDetails.isTeacher()) {
+            model.addAttribute("allStudents", studentService.getAllStudents());
+        }
         return "course/view";
     }
 
@@ -128,5 +135,33 @@ public class CourseController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/courses";
+    }
+
+    @PostMapping("/{courseId}/students/{studentId}/enroll")
+    @PreAuthorize("hasRole('TEACHER')")
+    public String enrollStudent(@PathVariable Long courseId,
+                                 @PathVariable Long studentId,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            studentService.enrollInCourse(studentId, courseId);
+            redirectAttributes.addFlashAttribute("successMessage", "Student enrolled successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/courses/" + courseId;
+    }
+
+    @PostMapping("/{courseId}/students/{studentId}/drop")
+    @PreAuthorize("hasRole('TEACHER')")
+    public String dropStudent(@PathVariable Long courseId,
+                               @PathVariable Long studentId,
+                               RedirectAttributes redirectAttributes) {
+        try {
+            studentService.unenrollFromCourse(studentId, courseId);
+            redirectAttributes.addFlashAttribute("successMessage", "Student dropped successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/courses/" + courseId;
     }
 }

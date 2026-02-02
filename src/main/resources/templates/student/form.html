@@ -2,34 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head(${isEditing != null && isEditing ? 'Edit Student' : 'New Student'})}"></head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="bg-gray-50/50 min-h-screen flex flex-col">
     <!-- Navbar -->
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <!-- Main Content -->
     <main class="flex-grow">
-        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <!-- Back Button -->
-            <a href="/students" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+            <a href="/students" class="inline-flex items-center text-gray-500 hover:text-gray-700 mb-6 font-medium">
                 <i class="fas fa-arrow-left mr-2"></i> Back to Students
             </a>
 
             <!-- Form Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="gradient-bg px-6 py-6">
-                    <h1 class="text-xl font-bold text-white">
-                        <i class="fas fa-user-graduate mr-2"></i>
-                        <span th:text="${isEditing != null && isEditing ? 'Edit Student' : 'Add New Student'}">Student Form</span>
-                    </h1>
+            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+                            <i class="fas fa-user-graduate text-white text-xl"></i>
+                        </div>
+                        <h1 class="ml-4 text-xl font-bold text-white" th:text="${isEditing != null && isEditing ? 'Edit Student' : 'Add New Student'}">Student Form</h1>
+                    </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-8">
                     <!-- Error Message -->
-                    <div th:if="${errorMessage}" class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-exclamation-circle text-red-400 mr-3"></i>
-                            <p class="text-red-700" th:text="${errorMessage}">Error</p>
+                    <div th:if="${errorMessage}" class="bg-red-50 border border-red-100 p-4 rounded-xl mb-6 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i class="fas fa-exclamation text-red-500"></i>
                         </div>
+                        <p class="text-red-700 text-sm font-medium" th:text="${errorMessage}">Error</p>
                     </div>
 
                     <form th:action="${isEditing != null && isEditing ? '/students/' + student.id + '/edit' : '/students/new'}"
@@ -39,95 +42,110 @@
 
                         <!-- Name Field -->
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-user text-gray-400 mr-1"></i> Full Name *
-                            </label>
-                            <input type="text"
-                                   id="name"
-                                   th:field="*{name}"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                                   th:classappend="${#fields.hasErrors('name')} ? 'border-red-500' : ''"
-                                   placeholder="e.g., John Doe">
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input type="text"
+                                       id="name"
+                                       th:field="*{name}"
+                                       class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-white transition-all input-field"
+                                       th:classappend="${#fields.hasErrors('name')} ? 'border-red-500' : ''"
+                                       placeholder="e.g., John Doe">
+                            </div>
                             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="mt-1 text-sm text-red-600"></p>
                         </div>
 
                         <!-- Roll Number Field -->
                         <div>
-                            <label for="roll" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-id-card text-gray-400 mr-1"></i> Roll Number *
-                            </label>
-                            <input type="text"
-                                   id="roll"
-                                   th:field="*{roll}"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                                   th:classappend="${#fields.hasErrors('roll')} ? 'border-red-500' : ''"
-                                   placeholder="e.g., CS2024001">
+                            <label for="roll" class="block text-sm font-medium text-gray-700 mb-2">Roll Number *</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-id-card text-gray-400"></i>
+                                </div>
+                                <input type="text"
+                                       id="roll"
+                                       th:field="*{roll}"
+                                       class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-white transition-all input-field"
+                                       th:classappend="${#fields.hasErrors('roll')} ? 'border-red-500' : ''"
+                                       placeholder="e.g., CS2024001">
+                            </div>
                             <p th:if="${#fields.hasErrors('roll')}" th:errors="*{roll}" class="mt-1 text-sm text-red-600"></p>
                         </div>
 
                         <!-- Email Field -->
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-envelope text-gray-400 mr-1"></i> Email Address *
-                            </label>
-                            <input type="email"
-                                   id="email"
-                                   th:field="*{email}"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                                   th:classappend="${#fields.hasErrors('email')} ? 'border-red-500' : ''"
-                                   placeholder="student@example.com">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input type="email"
+                                       id="email"
+                                       th:field="*{email}"
+                                       class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-white transition-all input-field"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'border-red-500' : ''"
+                                       placeholder="student@example.com">
+                            </div>
                             <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="mt-1 text-sm text-red-600"></p>
                         </div>
 
                         <!-- Password Field -->
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-lock text-gray-400 mr-1"></i> Password
-                                <span th:if="${isEditing != null && isEditing}" class="text-gray-400">(leave blank to keep current)</span>
+                                Password
+                                <span th:if="${isEditing != null && isEditing}" class="text-gray-400 font-normal">(leave blank to keep current)</span>
                                 <span th:unless="${isEditing != null && isEditing}">*</span>
                             </label>
-                            <input type="password"
-                                   id="password"
-                                   th:field="*{password}"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                                   th:classappend="${#fields.hasErrors('password')} ? 'border-red-500' : ''"
-                                   placeholder="••••••••">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password"
+                                       id="password"
+                                       th:field="*{password}"
+                                       class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-white transition-all input-field"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'border-red-500' : ''"
+                                       placeholder="••••••••">
+                            </div>
                             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="mt-1 text-sm text-red-600"></p>
                         </div>
 
                         <!-- Department Field (Only for Teachers) -->
                         <div sec:authorize="hasRole('TEACHER')">
-                            <label for="departmentId" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-building text-gray-400 mr-1"></i> Department
-                            </label>
-                            <select id="departmentId"
-                                    th:field="*{departmentId}"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
-                                <option value="">Select a department</option>
-                                <option th:each="dept : ${departments}"
-                                        th:value="${dept.id}"
-                                        th:text="${dept.name}">Department</option>
-                            </select>
+                            <label for="departmentId" class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-building text-gray-400"></i>
+                                </div>
+                                <select id="departmentId"
+                                        th:field="*{departmentId}"
+                                        class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:bg-white transition-all input-field appearance-none">
+                                    <option value="">Select a department</option>
+                                    <option th:each="dept : ${departments}"
+                                            th:value="${dept.id}"
+                                            th:text="${dept.name}">Department</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Courses Field -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-book text-gray-400 mr-1"></i> Enrolled Courses
-                            </label>
-                            <div class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto">
-                                <div th:if="${#lists.isEmpty(courses)}" class="text-gray-500 text-center py-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Enrolled Courses</label>
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 max-h-48 overflow-y-auto">
+                                <div th:if="${#lists.isEmpty(courses)}" class="text-gray-400 text-center py-2">
                                     No courses available
                                 </div>
-                                <div th:each="course : ${courses}" class="flex items-center mb-2">
+                                <div th:each="course : ${courses}" class="flex items-center mb-3 last:mb-0">
                                     <input type="checkbox"
                                            th:id="'course-' + ${course.id}"
                                            th:value="${course.id}"
                                            th:field="*{courseIds}"
                                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                    <label th:for="'course-' + ${course.id}" class="ml-2 text-sm text-gray-700">
-                                        <span th:text="${course.name}">Course</span>
-                                        <span class="text-gray-400" th:text="'(' + ${course.departmentName} + ')'">Dept</span>
+                                    <label th:for="'course-' + ${course.id}" class="ml-3 text-sm text-gray-700">
+                                        <span class="font-medium" th:text="${course.name}">Course</span>
+                                        <span class="text-gray-400 ml-1" th:text="'(' + ${course.departmentName} + ')'">Dept</span>
                                     </label>
                                 </div>
                             </div>
@@ -136,12 +154,12 @@
                         <!-- Submit Button -->
                         <div class="flex space-x-4 pt-4">
                             <button type="submit"
-                                    class="flex-1 gradient-bg text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg">
+                                    class="flex-1 btn-primary text-white py-3.5 px-4 rounded-xl font-semibold shadow-lg shadow-primary-500/30">
                                 <i class="fas fa-save mr-2"></i>
                                 <span th:text="${isEditing != null && isEditing ? 'Update Student' : 'Create Student'}">Save</span>
                             </button>
                             <a href="/students"
-                               class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-center">
+                               class="px-6 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors text-center">
                                 Cancel
                             </a>
                         </div>

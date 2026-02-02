@@ -1,8 +1,10 @@
 package com.sarwad.sms.studentmanagementsystem.service;
 
 import com.sarwad.sms.studentmanagementsystem.dto.CourseDto;
+import com.sarwad.sms.studentmanagementsystem.dto.StudentDto;
 import com.sarwad.sms.studentmanagementsystem.entity.Course;
 import com.sarwad.sms.studentmanagementsystem.entity.Department;
+import com.sarwad.sms.studentmanagementsystem.entity.Student;
 import com.sarwad.sms.studentmanagementsystem.exception.DuplicateResourceException;
 import com.sarwad.sms.studentmanagementsystem.exception.ResourceNotFoundException;
 import com.sarwad.sms.studentmanagementsystem.repository.CourseRepository;
@@ -92,6 +94,26 @@ public class CourseService {
             throw new ResourceNotFoundException("Course", id);
         }
         courseRepository.deleteById(id);
+    }
+
+    public List<StudentDto> getEnrolledStudents(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course", courseId));
+
+        return course.getStudents().stream()
+                .map(this::studentToDto)
+                .collect(Collectors.toList());
+    }
+
+    private StudentDto studentToDto(Student student) {
+        return StudentDto.builder()
+                .id(student.getId())
+                .name(student.getName())
+                .roll(student.getRoll())
+                .email(student.getEmail())
+                .departmentId(student.getDepartment() != null ? student.getDepartment().getId() : null)
+                .departmentName(student.getDepartment() != null ? student.getDepartment().getName() : null)
+                .build();
     }
 
     private CourseDto toDto(Course course) {

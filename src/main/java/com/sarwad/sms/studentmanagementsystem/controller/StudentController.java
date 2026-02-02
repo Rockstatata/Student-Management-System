@@ -1,5 +1,6 @@
 package com.sarwad.sms.studentmanagementsystem.controller;
 
+import com.sarwad.sms.studentmanagementsystem.dto.CourseDto;
 import com.sarwad.sms.studentmanagementsystem.dto.StudentDto;
 import com.sarwad.sms.studentmanagementsystem.exception.UnauthorizedAccessException;
 import com.sarwad.sms.studentmanagementsystem.security.CustomUserDetails;
@@ -15,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/students")
@@ -48,6 +51,13 @@ public class StudentController {
         model.addAttribute("student", student);
         model.addAttribute("user", userDetails);
         model.addAttribute("courses", courseService.getAllCourses());
+
+        // Get available courses (not enrolled)
+        List<CourseDto> availableCourses = courseService.getAllCourses().stream()
+                .filter(course -> student.getCourseIds() == null || !student.getCourseIds().contains(course.getId()))
+                .collect(java.util.stream.Collectors.toList());
+        model.addAttribute("availableCourses", availableCourses);
+
         return "student/view";
     }
 
@@ -153,5 +163,43 @@ public class StudentController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/students";
+    }
+
+    @PostMapping("/{studentId}/courses/{courseId}/enroll")
+    public String enrollInCourse(@PathVariable Long studentId,
+                                   @PathVariable Long courseId,
+                                   @AuthenticationPrincipal CustomUserDetails userDetails,
+                                   RedirectAttributes redirectAttributes) {
+        // Students can only enroll themselves, teachers can enroll any student
+        if (userDetails.isStudent() && !userDetails.getId().equals(studentId)) {
+            throw new UnauthorizedAccessException("You can only enroll yourself in courses");
+        }
+
+        try {
+            studentService.enrollInCourse(studentId, courseId);
+            redirectAttributes.addFlashAttribute("successMessage", "Successfully enrolled in course!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/students/" + studentId;
+    }
+
+    @PostMapping("/{studentId}/courses/{courseId}/drop")
+    public String dropCourse(@PathVariable Long studentId,
+                              @PathVariable Long courseId,
+                              @AuthenticationPrincipal CustomUserDetails userDetails,
+                              RedirectAttributes redirectAttributes) {
+        // Students can only drop their own courses, teachers can drop any student
+        if (userDetails.isStudent() && !userDetails.getId().equals(studentId)) {
+            throw new UnauthorizedAccessException("You can only drop your own courses");
+        }
+
+        try {
+            studentService.unenrollFromCourse(studentId, courseId);
+            redirectAttributes.addFlashAttribute("successMessage", "Successfully dropped course!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/students/" + studentId;
     }
 }
