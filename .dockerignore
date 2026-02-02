@@ -1,0 +1,36 @@
+# Maven
+# target/  # Commented out - we need the JAR file for Docker build
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+compose.yaml
+
+# Documentation
+*.md
+HELP.md
+IMPLEMENTATION_SUMMARY.md
+plan.md
+
+# Test files
+src/test/
+
+# Logs
+*.log

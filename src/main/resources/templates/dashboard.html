@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Alerts -->
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    Welcome back, <span th:text="${user?.name ?: 'User'}">User</span>! 👋
+                </h1>
+                <p class="mt-2 text-gray-600">Here's an overview of your student management system.</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Departments Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100">
+                            <i class="fas fa-building text-purple-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Departments</p>
+                            <p class="text-2xl font-bold text-gray-900" th:text="${departmentCount}">0</p>
+                        </div>
+                    </div>
+                    <a href="/departments" class="mt-4 inline-flex items-center text-sm text-purple-600 hover:text-purple-700">
+                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Students Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100">
+                            <i class="fas fa-user-graduate text-green-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Students</p>
+                            <p class="text-2xl font-bold text-gray-900" th:text="${studentCount}">0</p>
+                        </div>
+                    </div>
+                    <a href="/students" class="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
+                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Teachers Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100">
+                            <i class="fas fa-chalkboard-teacher text-yellow-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Teachers</p>
+                            <p class="text-2xl font-bold text-gray-900" th:text="${teacherCount}">0</p>
+                        </div>
+                    </div>
+                    <a href="/teachers" class="mt-4 inline-flex items-center text-sm text-yellow-600 hover:text-yellow-700">
+                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Courses Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card-hover">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100">
+                            <i class="fas fa-book text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Courses</p>
+                            <p class="text-2xl font-bold text-gray-900" th:text="${courseCount}">0</p>
+                        </div>
+                    </div>
+                    <a href="/courses" class="mt-4 inline-flex items-center text-sm text-blue-600 hover:text-blue-700">
+                        View all <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" sec:authorize="hasRole('TEACHER')">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-bolt text-yellow-500 mr-2"></i> Quick Actions
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <a href="/departments/new" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                        <i class="fas fa-plus-circle text-purple-600 mr-3"></i>
+                        <span class="font-medium text-purple-700">New Department</span>
+                    </a>
+                    <a href="/courses/new" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-plus-circle text-blue-600 mr-3"></i>
+                        <span class="font-medium text-blue-700">New Course</span>
+                    </a>
+                    <a href="/students/new" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <i class="fas fa-user-plus text-green-600 mr-3"></i>
+                        <span class="font-medium text-green-700">New Student</span>
+                    </a>
+                    <a href="/students" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-users text-gray-600 mr-3"></i>
+                        <span class="font-medium text-gray-700">Manage Students</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Student View Actions -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" sec:authorize="hasRole('STUDENT')">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-compass text-blue-500 mr-2"></i> Navigation
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <a href="/departments" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                        <i class="fas fa-building text-purple-600 mr-3"></i>
+                        <span class="font-medium text-purple-700">Browse Departments</span>
+                    </a>
+                    <a href="/courses" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-book text-blue-600 mr-3"></i>
+                        <span class="font-medium text-blue-700">Browse Courses</span>
+                    </a>
+                    <a href="/teachers" class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors">
+                        <i class="fas fa-chalkboard-teacher text-yellow-600 mr-3"></i>
+                        <span class="font-medium text-yellow-700">View Teachers</span>
+                    </a>
+                    <a href="/students" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <i class="fas fa-users text-green-600 mr-3"></i>
+                        <span class="font-medium text-green-700">View Students</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

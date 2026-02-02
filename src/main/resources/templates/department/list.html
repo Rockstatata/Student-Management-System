@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Departments')}"></head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Alerts -->
+            <div th:replace="~{fragments/layout :: alerts}"></div>
+
+            <!-- Page Header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        <i class="fas fa-building text-purple-600 mr-2"></i> Departments
+                    </h1>
+                    <p class="mt-2 text-gray-600">Manage all academic departments</p>
+                </div>
+                <div class="mt-4 md:mt-0" sec:authorize="hasRole('TEACHER')">
+                    <a href="/departments/new"
+                       class="inline-flex items-center px-4 py-2 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity shadow-md">
+                        <i class="fas fa-plus mr-2"></i> Add Department
+                    </a>
+                </div>
+            </div>
+
+            <!-- Departments Grid -->
+            <div th:if="${#lists.isEmpty(departments)}" class="text-center py-12 bg-white rounded-xl shadow-sm">
+                <i class="fas fa-building text-6xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">No departments found</p>
+                <a href="/departments/new" class="mt-4 inline-flex items-center text-primary-600 hover:text-primary-700" sec:authorize="hasRole('TEACHER')">
+                    <i class="fas fa-plus mr-1"></i> Create your first department
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" th:unless="${#lists.isEmpty(departments)}">
+                <div th:each="dept : ${departments}"
+                     class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-purple-100">
+                                    <i class="fas fa-building text-purple-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900" th:text="${dept.name}">Department Name</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-600 text-sm line-clamp-2" th:text="${dept.description ?: 'No description available'}">
+                            Description
+                        </p>
+                        <div class="mt-4 flex items-center space-x-4 text-sm text-gray-500">
+                            <span><i class="fas fa-chalkboard-teacher mr-1"></i> <span th:text="${dept.teacherCount}">0</span> Teachers</span>
+                            <span><i class="fas fa-user-graduate mr-1"></i> <span th:text="${dept.studentCount}">0</span> Students</span>
+                            <span><i class="fas fa-book mr-1"></i> <span th:text="${dept.courseCount}">0</span> Courses</span>
+                        </div>
+                    </div>
+                    <div class="px-6 py-3 bg-gray-50 border-t flex justify-between items-center">
+                        <a th:href="@{/departments/{id}(id=${dept.id})}"
+                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                            <i class="fas fa-eye mr-1"></i> View Details
+                        </a>
+                        <div class="flex space-x-2" sec:authorize="hasRole('TEACHER')">
+                            <a th:href="@{/departments/{id}/edit(id=${dept.id})}"
+                               class="text-gray-500 hover:text-gray-700 p-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form th:action="@{/departments/{id}/delete(id=${dept.id})}" method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this department?');">
+                                <button type="submit" class="text-red-500 hover:text-red-700 p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<body class="min-h-screen gradient-bg flex items-center justify-center">
+    <div class="w-full max-w-md">
+        <!-- Logo Section -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-lg mb-4">
+                <i class="fas fa-graduation-cap text-4xl text-primary-600"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-white">Student Management</h1>
+            <p class="text-white/70 mt-2">Sign in to your account</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <!-- Error Alert -->
+            <div th:if="${param.error}" class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mb-6">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle text-red-400 mr-3"></i>
+                    <p class="text-red-700">Invalid email or password</p>
+                </div>
+            </div>
+
+            <!-- Logout Success Alert -->
+            <div th:if="${param.logout}" class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg mb-6">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-400 mr-3"></i>
+                    <p class="text-green-700">You have been logged out successfully</p>
+                </div>
+            </div>
+
+            <!-- Registration Success Alert -->
+            <div th:if="${param.registered}" class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg mb-6">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-green-400 mr-3"></i>
+                    <p class="text-green-700">Registration successful! Please login with your credentials</p>
+                </div>
+            </div>
+
+            <form th:action="@{/login}" method="post" class="space-y-6">
+                <!-- Email Field -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-envelope text-gray-400 mr-1"></i> Email Address
+                    </label>
+                    <input type="email"
+                           id="username"
+                           name="username"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                           placeholder="Enter your email">
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-lock text-gray-400 mr-1"></i> Password
+                    </label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                           placeholder="Enter your password">
+                </div>
+
+                <!-- Remember Me -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox"
+                               id="remember-me"
+                               name="remember-me"
+                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Remember me
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit"
+                        class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+                </button>
+            </form>
+
+            <!-- Register Link -->
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Don't have an account?
+                    <a href="/register" class="text-primary-600 font-medium hover:text-primary-700 transition-colors">
+                        Register here
+                    </a>
+                </p>
+            </div>
+
+            <!-- Demo Credentials -->
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <p class="text-sm text-gray-500 text-center mb-4">Demo Credentials</p>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <p class="font-medium text-yellow-800"><i class="fas fa-chalkboard-teacher mr-1"></i> Teacher</p>
+                        <p class="text-yellow-600">teacher@example.com</p>
+                        <p class="text-yellow-600">password123</p>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <p class="font-medium text-green-800"><i class="fas fa-user-graduate mr-1"></i> Student</p>
+                        <p class="text-green-600">student@example.com</p>
+                        <p class="text-green-600">password123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-white/60 text-sm mt-8">
+            © 2026 Student Management System
+        </p>
+    </div>
+</body>
+</html>

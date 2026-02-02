@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | SMS'">Student Management System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Heroicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+        .sidebar-link.active {
+            background: rgba(99, 102, 241, 0.15);
+            border-right: 3px solid #6366f1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Fragment -->
+<nav th:fragment="navbar" class="gradient-bg shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="/dashboard" class="flex items-center">
+                    <i class="fas fa-graduation-cap text-white text-2xl mr-3"></i>
+                    <span class="text-white font-bold text-xl">Student MS</span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/dashboard" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fas fa-home mr-1"></i> Dashboard
+                    </a>
+                    <a href="/departments" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fas fa-building mr-1"></i> Departments
+                    </a>
+                    <a href="/courses" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fas fa-book mr-1"></i> Courses
+                    </a>
+                    <a href="/students" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fas fa-user-graduate mr-1"></i> Students
+                    </a>
+                    <a href="/teachers" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fas fa-chalkboard-teacher mr-1"></i> Teachers
+                    </a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-white">
+                        <span class="text-sm text-white/70">Welcome,</span>
+                        <span class="font-medium" th:text="${user?.name ?: 'User'}">User</span>
+                        <span class="ml-1 px-2 py-0.5 text-xs rounded-full"
+                              th:classappend="${user?.teacher ? 'bg-yellow-400 text-yellow-900' : 'bg-green-400 text-green-900'}"
+                              th:text="${user?.teacher ? 'Teacher' : 'Student'}">Role</span>
+                    </div>
+                    <form th:action="@{/logout}" method="post" class="inline">
+                        <button type="submit" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Alert Messages Fragment -->
+<div th:fragment="alerts" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+    <div th:if="${successMessage}" class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg mb-4">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle text-green-400 mr-3"></i>
+            <p class="text-green-700" th:text="${successMessage}">Success message</p>
+        </div>
+    </div>
+    <div th:if="${errorMessage}" class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mb-4">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-circle text-red-400 mr-3"></i>
+            <p class="text-red-700" th:text="${errorMessage}">Error message</p>
+        </div>
+    </div>
+</div>
+
+<!-- Page Header Fragment -->
+<div th:fragment="page-header(title, subtitle)" class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900" th:text="${title}">Page Title</h1>
+    <p class="mt-2 text-gray-600" th:text="${subtitle}">Page subtitle</p>
+</div>
+
+<!-- Empty State Fragment -->
+<div th:fragment="empty-state(message, icon)" class="text-center py-12">
+    <i th:class="${icon} + ' text-6xl text-gray-300 mb-4'"></i>
+    <p class="text-gray-500 text-lg" th:text="${message}">No items found</p>
+</div>
+
+<!-- Footer Fragment -->
+<footer th:fragment="footer" class="bg-gray-50 border-t mt-auto">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-gray-500 text-sm">
+            © 2026 Student Management System. Built with Spring Boot & Thymeleaf.
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
