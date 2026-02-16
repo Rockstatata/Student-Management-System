@@ -1,6 +1,6 @@
 # Student Management System
 
-A comprehensive web-based Student Management System built with Spring Boot, featuring role-based access control, course enrollment management, and a modern responsive UI.
+A comprehensive web-based Student Management System built with Spring Boot, featuring role-based access control, course enrollment management, and a modern responsive UI 
 
 ## Table of Contents
 
@@ -337,6 +337,37 @@ The application seeds sample data on first run:
 - Depends on Postgres (waits for health check)
 - Auto-connects using service name resolution
 - Spring Boot with embedded Tomcat
+
+## Docker Integration
+
+This project includes first-class Docker integration to make local development and CI runs reproducible.
+
+What is included
+- `Dockerfile` — builds the Spring Boot application into a container image.
+- `compose.yaml` (or `docker-compose.yml`) — convenient local orchestration of the `app` service and a PostgreSQL service used by the application during development and CI.
+- Health checks and service dependency wiring so the app waits for the database before starting.
+
+Quick commands (PowerShell)
+
+```powershell
+# Build and start app + database (rebuild image)
+docker-compose up -d --build
+
+# Follow logs for the app service
+docker-compose logs -f app
+
+# Stop and remove containers
+docker-compose down
+
+# Reset DB data (remove volumes)
+docker-compose down -v
+```
+
+Environment variables
+- See `application.properties` and the compose file for environment variables. You can override them with a `.env` file or with environment variables in your shell/CI.
+
+Notes
+- Use the dockerized Postgres during integration tests to ensure a close-to-production environment if you are not using Testcontainers.
 
 ## API Endpoints
 
