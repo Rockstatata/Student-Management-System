@@ -177,7 +177,6 @@ class CourseRepositoryTest {
 
         // Act
         courseRepository.deleteById(courseId);
-        // flush();
 
         // Assert
         Optional<Course> deletedCourse = courseRepository.findById(courseId);
@@ -194,7 +193,6 @@ class CourseRepositoryTest {
         savedCourse.setName("Advanced Data Structures");
         savedCourse.setCredits(4);
         courseRepository.save(savedCourse);
-        // flush();
 
         // Assert
         Course updatedCourse = courseRepository.findById(savedCourse.getId()).orElseThrow();
