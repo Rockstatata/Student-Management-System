@@ -193,7 +193,6 @@ class CourseServiceTest {
     void updateCourse_Success() {
         // Arrange
         when(courseRepository.findById(1L)).thenReturn(Optional.of(testCourse));
-        when(courseRepository.existsByNameAndDepartmentId("Data Structures", 1L)).thenReturn(false);
         when(departmentRepository.findById(1L)).thenReturn(Optional.of(testDepartment));
         when(courseRepository.save(any(Course.class))).thenReturn(testCourse);
 

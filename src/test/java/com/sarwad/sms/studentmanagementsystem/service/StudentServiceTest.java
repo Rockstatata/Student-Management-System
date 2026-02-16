@@ -239,9 +239,8 @@ class StudentServiceTest {
     void updateStudent_Success() {
         // Arrange
         when(studentRepository.findById(1L)).thenReturn(Optional.of(testStudent));
-        when(studentRepository.existsByEmail(anyString())).thenReturn(false);
-        when(studentRepository.existsByRoll(anyString())).thenReturn(false);
         when(departmentRepository.findById(1L)).thenReturn(Optional.of(testDepartment));
+        when(courseRepository.findById(1L)).thenReturn(Optional.of(testCourse));
         when(passwordEncoder.encode(anyString())).thenReturn("newEncodedPassword");
         when(studentRepository.save(any(Student.class))).thenReturn(testStudent);
 

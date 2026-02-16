@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
+@org.springframework.test.annotation.DirtiesContext(classMode = org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayName("StudentRepository Tests")
 class StudentRepositoryTest {
 
@@ -37,17 +38,18 @@ class StudentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // Arrange - Create test data
+        // Arrange - Create test data with unique names for each test
+        String uniqueSuffix = "_" + System.nanoTime();
         testDepartment = Department.builder()
-                .name("Computer Science")
+                .name("Computer Science" + uniqueSuffix)
                 .description("CS Department")
                 .build();
         testDepartment = departmentRepository.save(testDepartment);
 
         testStudent = Student.builder()
                 .name("John Doe")
-                .roll("CS001")
-                .email("john.doe@example.com")
+                .roll("CS001" + uniqueSuffix)
+                .email("john.doe" + uniqueSuffix + "@example.com")
                 .password("encodedPassword")
                 .role(Role.STUDENT)
                 .department(testDepartment)
@@ -64,8 +66,8 @@ class StudentRepositoryTest {
         assertThat(savedStudent).isNotNull();
         assertThat(savedStudent.getId()).isNotNull();
         assertThat(savedStudent.getName()).isEqualTo("John Doe");
-        assertThat(savedStudent.getEmail()).isEqualTo("john.doe@example.com");
-        assertThat(savedStudent.getRoll()).isEqualTo("CS001");
+        assertThat(savedStudent.getEmail()).isEqualTo(testStudent.getEmail());
+        assertThat(savedStudent.getRoll()).isEqualTo(testStudent.getRoll());
     }
 
     @Test
@@ -80,7 +82,7 @@ class StudentRepositoryTest {
         // Assert
         assertThat(foundStudent).isPresent();
         assertThat(foundStudent.get().getName()).isEqualTo("John Doe");
-        assertThat(foundStudent.get().getEmail()).isEqualTo("john.doe@example.com");
+        assertThat(foundStudent.get().getEmail()).isEqualTo(testStudent.getEmail());
     }
 
     @Test
@@ -97,15 +99,15 @@ class StudentRepositoryTest {
     @DisplayName("Should find student by email successfully")
     void findByEmail_Success() {
         // Arrange
-        studentRepository.save(testStudent);
+        Student savedStudent = studentRepository.save(testStudent);
 
         // Act
-        Optional<Student> foundStudent = studentRepository.findByEmail("john.doe@example.com");
+        Optional<Student> foundStudent = studentRepository.findByEmail(savedStudent.getEmail());
 
         // Assert
         assertThat(foundStudent).isPresent();
         assertThat(foundStudent.get().getName()).isEqualTo("John Doe");
-        assertThat(foundStudent.get().getRoll()).isEqualTo("CS001");
+        assertThat(foundStudent.get().getRoll()).isEqualTo(savedStudent.getRoll());
     }
 
     @Test
@@ -122,15 +124,15 @@ class StudentRepositoryTest {
     @DisplayName("Should find student by roll successfully")
     void findByRoll_Success() {
         // Arrange
-        studentRepository.save(testStudent);
+        Student savedStudent = studentRepository.save(testStudent);
 
         // Act
-        Optional<Student> foundStudent = studentRepository.findByRoll("CS001");
+        Optional<Student> foundStudent = studentRepository.findByRoll(savedStudent.getRoll());
 
         // Assert
         assertThat(foundStudent).isPresent();
         assertThat(foundStudent.get().getName()).isEqualTo("John Doe");
-        assertThat(foundStudent.get().getEmail()).isEqualTo("john.doe@example.com");
+        assertThat(foundStudent.get().getEmail()).isEqualTo(savedStudent.getEmail());
     }
 
     @Test
@@ -147,10 +149,10 @@ class StudentRepositoryTest {
     @DisplayName("Should check if email exists")
     void existsByEmail_Success() {
         // Arrange
-        studentRepository.save(testStudent);
+        Student savedStudent = studentRepository.save(testStudent);
 
         // Act
-        boolean exists = studentRepository.existsByEmail("john.doe@example.com");
+        boolean exists = studentRepository.existsByEmail(savedStudent.getEmail());
         boolean notExists = studentRepository.existsByEmail("nonexistent@example.com");
 
         // Assert
@@ -162,10 +164,10 @@ class StudentRepositoryTest {
     @DisplayName("Should check if roll exists")
     void existsByRoll_Success() {
         // Arrange
-        studentRepository.save(testStudent);
+        Student savedStudent = studentRepository.save(testStudent);
 
         // Act
-        boolean exists = studentRepository.existsByRoll("CS001");
+        boolean exists = studentRepository.existsByRoll(savedStudent.getRoll());
         boolean notExists = studentRepository.existsByRoll("NONEXISTENT");
 
         // Assert
@@ -179,10 +181,11 @@ class StudentRepositoryTest {
         // Arrange
         studentRepository.save(testStudent);
 
+        String uniqueSuffix = "_" + System.nanoTime();
         Student anotherStudent = Student.builder()
                 .name("Jane Smith")
-                .roll("CS002")
-                .email("jane.smith@example.com")
+                .roll("CS002" + uniqueSuffix)
+                .email("jane.smith" + uniqueSuffix + "@example.com")
                 .password("encodedPassword")
                 .role(Role.STUDENT)
                 .department(testDepartment)
@@ -202,8 +205,9 @@ class StudentRepositoryTest {
     @DisplayName("Should return empty list when no students in department")
     void findByDepartmentId_EmptyList() {
         // Arrange
+        String uniqueSuffix = "_" + System.nanoTime();
         Department anotherDepartment = Department.builder()
-                .name("Mathematics")
+                .name("Mathematics" + uniqueSuffix)
                 .description("Math Department")
                 .build();
         anotherDepartment = departmentRepository.save(anotherDepartment);
